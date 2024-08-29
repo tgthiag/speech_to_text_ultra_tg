@@ -187,7 +187,7 @@ class SpeechToTextUltra2 {
           final state = result.recognizedWords;
           liveResponse = state;
           if (result.finalResult) {
-            chunkResponse = result.recognizedWords;
+            entireResponse = result.recognizedWords;
           }
           ultraCallback(liveResponse, entireResponse, isListening);
           entireResponse = "";
