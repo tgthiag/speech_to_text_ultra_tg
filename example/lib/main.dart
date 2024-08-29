@@ -1,73 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:speech_to_text_ultra/speech_to_text_ultra.dart';
+import 'package:speech_to_text_ultra_tg/speech_to_text_ultra.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late SpeechToTextUltra2 speechService;
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SpeechToTextUltraWidgetImplementation(),
+  void initState() {
+    super.initState();
+    speechService = SpeechToTextUltra2(
+      ultraCallback: (liveText, finalText, isListening) {
+        // print('Live Text: $liveText');
+        if (finalText.isNotEmpty) {
+          print(finalText);
+        }
+        // print('Is Listening: $isListening');
+      },
+      language: 'en-US',
     );
   }
-}
-
-class SpeechToTextUltraWidgetImplementation extends StatefulWidget {
-  const SpeechToTextUltraWidgetImplementation({super.key});
-
-  @override
-  State<SpeechToTextUltraWidgetImplementation> createState() =>
-      _SpeechToTextUltraWidgetImplementationState();
-}
-
-class _SpeechToTextUltraWidgetImplementationState
-    extends State<SpeechToTextUltraWidgetImplementation> {
-  bool mIsListening = false;
-  String mEntireResponse = '';
-  String mLiveResponse = '';
-  String language = 'en-US';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.teal,
-        centerTitle: true,
-        title: const Text(
-          'Speech To Text Ultra',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Speech to Text Example'),
         ),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              mIsListening
-                  ? Text('$mEntireResponse $mLiveResponse')
-                  : Text(mEntireResponse),
-              const SizedBox(height: 20),
-              SpeechToTextUltra(
-                ultraCallback:
-                    (String liveText, String finalText, bool isListening) {
-                  setState(() {
-                    mLiveResponse = liveText;
-                    mEntireResponse = finalText;
-                    mIsListening = isListening;
-                  });
+              ElevatedButton(
+                onPressed: () {
+                  speechService.startListening();
                 },
-                // toPauseIcon: const Icon(Icons.pause),
-                // toStartIcon: const Icon(Icons.mic),
-                // pauseIconColor: Colors.black,
-                // startIconColor: Colors.black,
+                child: Text('Start Listening'),
               ),
-              const SizedBox(
-                height: 10,
+              ElevatedButton(
+                onPressed: () {
+                  speechService.stopListening();
+                },
+                child: Text('Stop Listening'),
               ),
             ],
           ),
