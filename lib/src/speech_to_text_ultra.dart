@@ -183,7 +183,7 @@ class SpeechToTextUltra2 {
       }
       await speech.listen(
         localeId: language,
-        onResult: (result) {
+        onResult: (result) async {
           final state = result.recognizedWords;
           liveResponse = state;
           if (result.finalResult) {
