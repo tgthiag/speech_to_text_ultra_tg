@@ -1,5 +1,5 @@
-import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class SpeechToTextUltra extends StatefulWidget {
   // final ValueChanged<String> callback;
@@ -8,6 +8,7 @@ class SpeechToTextUltra extends StatefulWidget {
   final Color? pauseIconColor;
   final Color? startIconColor;
   final double? startIconSize;
+  final String? language;
   final double? pauseIconSize;
   final Function(String liveText, String finalText, bool isListening)
       ultraCallback;
@@ -21,6 +22,7 @@ class SpeechToTextUltra extends StatefulWidget {
       this.pauseIconColor = Colors.black,
       this.startIconColor = Colors.black,
       this.startIconSize = 24,
+      this.language,
       this.pauseIconSize = 24});
 
   @override
@@ -92,6 +94,7 @@ class _SpeechToTextUltraState extends State<SpeechToTextUltra> {
         widget.ultraCallback(liveResponse, entireResponse, isListening);
       });
       await speech.listen(
+        localeId: widget.language,
         onResult: (result) {
           setState(() {
             final state = result.recognizedWords;
