@@ -198,7 +198,7 @@ class SpeechToTextUltra2 {
     speech.stop();
 
     isListening = false;
-    entireResponse = '$entireResponse $chunkResponse';
+    entireResponse = chunkResponse;
     ultraCallback(liveResponse, entireResponse, isListening);
   }
 }
