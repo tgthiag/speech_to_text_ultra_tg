@@ -10,8 +10,8 @@ class SpeechToTextUltra extends StatefulWidget {
   final double? startIconSize;
   final String? language;
   final double? pauseIconSize;
-  final Function(String liveText, String finalText, String lastSpoken,
-      bool isListening) ultraCallback;
+  final Function(String liveText, String finalText, bool isListening)
+      ultraCallback;
 
   // String combinedResponse = '';
   const SpeechToTextUltra(
@@ -79,8 +79,7 @@ class _SpeechToTextUltraState extends State<SpeechToTextUltra> {
             chunkResponse = '';
             liveResponse = '';
             //MAIN CALLBACK HAPPENS
-            widget.ultraCallback(
-                liveResponse, entireResponse, chunkResponse, isListening);
+            widget.ultraCallback(liveResponse, entireResponse, isListening);
           });
           startListening();
         }
@@ -92,8 +91,7 @@ class _SpeechToTextUltraState extends State<SpeechToTextUltra> {
         isListening = true;
         liveResponse = '';
         chunkResponse = '';
-        widget.ultraCallback(
-            liveResponse, entireResponse, chunkResponse, isListening);
+        widget.ultraCallback(liveResponse, entireResponse, isListening);
       });
       await speech.listen(
         localeId: widget.language,
@@ -104,8 +102,7 @@ class _SpeechToTextUltraState extends State<SpeechToTextUltra> {
             if (result.finalResult) {
               chunkResponse = result.recognizedWords;
             }
-            widget.ultraCallback(
-                liveResponse, entireResponse, chunkResponse, isListening);
+            widget.ultraCallback(liveResponse, entireResponse, isListening);
           });
         },
       );
@@ -119,8 +116,7 @@ class _SpeechToTextUltraState extends State<SpeechToTextUltra> {
     setState(() {
       isListening = false;
       entireResponse = '$entireResponse $chunkResponse';
-      widget.ultraCallback(
-          liveResponse, entireResponse, chunkResponse, isListening);
+      widget.ultraCallback(liveResponse, entireResponse, isListening);
     });
   }
 }
