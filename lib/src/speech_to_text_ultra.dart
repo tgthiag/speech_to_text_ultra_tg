@@ -167,6 +167,7 @@ class SpeechToTextUltra2 {
           liveResponse = '';
           //MAIN CALLBACK HAPPENS
           ultraCallback(liveResponse, entireResponse, isListening);
+          entireResponse = "";
           startListening();
         }
       },
@@ -176,8 +177,10 @@ class SpeechToTextUltra2 {
       isListening = true;
       liveResponse = '';
       chunkResponse = '';
-      ultraCallback(liveResponse, entireResponse, isListening);
-
+      if (entireResponse.isNotEmpty) {
+        ultraCallback(liveResponse, entireResponse, isListening);
+        entireResponse = "";
+      }
       await speech.listen(
         localeId: language,
         onResult: (result) {
@@ -187,6 +190,7 @@ class SpeechToTextUltra2 {
             chunkResponse = result.recognizedWords;
           }
           ultraCallback(liveResponse, entireResponse, isListening);
+          entireResponse = "";
         },
       );
     } else {
@@ -200,6 +204,7 @@ class SpeechToTextUltra2 {
     isListening = false;
     entireResponse = chunkResponse;
     ultraCallback(liveResponse, entireResponse, isListening);
+    entireResponse = "";
   }
 
   void dispose() {
