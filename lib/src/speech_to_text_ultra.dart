@@ -179,12 +179,10 @@ class SpeechToTextUltra2 {
   }
 
   Future<void> stopListening() async {
-    if (_isListening) {
-      await _speech.stop();
-      _isListening = false;
-      _entireResponse = '$_entireResponse $_chunkResponse';
-      ultraCallback(_liveResponse, _entireResponse, _isListening);
-    }
+    _speech.stop();
+    _isListening = false;
+    _entireResponse = '$_entireResponse $_chunkResponse';
+    ultraCallback(_liveResponse, _entireResponse, _isListening);
   }
 
   bool get isListening => _isListening;
