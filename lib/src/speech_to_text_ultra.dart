@@ -137,21 +137,21 @@ class SpeechToTextUltra2 {
     speech = SpeechToText(); // Initialize here to avoid multiple instances
   }
 
-  Future<void> initializeSpeech() async {
-    if (!isInitialized) {
-      isInitialized = await speech.initialize(
-        onStatus: (status) async {
-          if ((status == "done" || status == "notListening") && isListening) {
-            await stopListening();
-            startListening();
-          }
-        },
-      );
-      if (isInitialized) {
-        debugPrint('Ultra Speech ERROR: Speech recognition not available');
-      }
-    }
-  }
+  // Future<void> initializeSpeech() async {
+  //   if (!isInitialized) {
+  //     isInitialized = await speech.initialize(
+  //       onStatus: (status) async {
+  //         if ((status == "done" || status == "notListening") && isListening) {
+  //           // await stopListening();
+  //           // startListening();
+  //         }
+  //       },
+  //     );
+  //     if (isInitialized) {
+  //       debugPrint('Ultra Speech ERROR: Speech recognition not available');
+  //     }
+  //   }
+  // }
 
   void startListening() async {
     // speech = SpeechToText();
@@ -201,10 +201,4 @@ class SpeechToTextUltra2 {
     entireResponse = '$entireResponse $chunkResponse';
     ultraCallback(liveResponse, entireResponse, isListening);
   }
-
-  bool get isListening => _isListening;
-
-  String get liveResponse => _liveResponse;
-
-  String get entireResponse => _entireResponse;
 }
