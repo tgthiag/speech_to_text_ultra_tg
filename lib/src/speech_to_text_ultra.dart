@@ -120,3 +120,68 @@ class _SpeechToTextUltraState extends State<SpeechToTextUltra> {
     });
   }
 }
+
+class SpeechToTextUltra2 {
+  late SpeechToText _speech;
+  bool _isListening = false;
+  String _liveResponse = '';
+  String _entireResponse = '';
+  String _chunkResponse = '';
+
+  final String? language;
+  final Function(String liveText, String finalText, bool isListening)
+      ultraCallback;
+
+  SpeechToTextUltra2({required this.ultraCallback, this.language}) {
+    initializeSpeech();
+  }
+
+  void initializeSpeech() {
+    _speech = SpeechToText();
+  }
+
+  Future<void> startListening() async {
+    bool available = await _speech.initialize(
+      onStatus: (status) async {
+        if ((status == "done" || status == "notListening") && _isListening) {
+          await stopListening();
+          startListening();
+        }
+      },
+    );
+
+    if (available) {
+      _isListening = true;
+      _liveResponse = '';
+      _chunkResponse = '';
+      ultraCallback(_liveResponse, _entireResponse, _isListening);
+
+      await _speech.listen(
+        localeId: language,
+        onResult: (result) {
+          final state = result.recognizedWords;
+          _liveResponse = state;
+          if (result.finalResult) {
+            _chunkResponse = result.recognizedWords;
+          }
+          ultraCallback(_liveResponse, _entireResponse, _isListening);
+        },
+      );
+    } else {
+      debugPrint('Ultra Speech ERROR: Speech recognition not available');
+    }
+  }
+
+  Future<void> stopListening() async {
+    await _speech.stop();
+    _isListening = false;
+    _entireResponse = '$_entireResponse $_chunkResponse';
+    ultraCallback(_liveResponse, _entireResponse, _isListening);
+  }
+
+  bool get isListening => _isListening;
+
+  String get liveResponse => _liveResponse;
+
+  String get entireResponse => _entireResponse;
+}
