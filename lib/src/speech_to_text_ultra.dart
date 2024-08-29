@@ -26,10 +26,10 @@ class SpeechToTextUltra extends StatefulWidget {
       this.pauseIconSize = 24});
 
   @override
-  State<SpeechToTextUltra> createState() => _SpeechToTextUltraState();
+  State<SpeechToTextUltra> createState() => SpeechToTextUltraState();
 }
 
-class _SpeechToTextUltraState extends State<SpeechToTextUltra> {
+class SpeechToTextUltraState extends State<SpeechToTextUltra> {
   late SpeechToText speech;
   bool isListening = false;
   String liveResponse = '';
@@ -122,67 +122,84 @@ class _SpeechToTextUltraState extends State<SpeechToTextUltra> {
 }
 
 class SpeechToTextUltra2 {
-  late SpeechToText _speech;
-  bool _isListening = false;
-  bool _isInitialized = false;
-  String _liveResponse = '';
-  String _entireResponse = '';
-  String _chunkResponse = '';
+  late SpeechToText speech;
+  bool isListening = false;
+  bool isInitialized = false;
+  String liveResponse = '';
+  String entireResponse = '';
+  String chunkResponse = '';
 
   final String? language;
   final Function(String liveText, String finalText, bool isListening)
       ultraCallback;
 
   SpeechToTextUltra2({required this.ultraCallback, this.language}) {
-    _speech = SpeechToText(); // Initialize here to avoid multiple instances
+    speech = SpeechToText(); // Initialize here to avoid multiple instances
   }
 
   Future<void> initializeSpeech() async {
-    if (!_isInitialized) {
-      _isInitialized = await _speech.initialize(
+    if (!isInitialized) {
+      isInitialized = await speech.initialize(
         onStatus: (status) async {
-          if ((status == "done" || status == "notListening") && _isListening) {
+          if ((status == "done" || status == "notListening") && isListening) {
             await stopListening();
             startListening();
           }
         },
       );
-      if (!_isInitialized) {
+      if (isInitialized) {
         debugPrint('Ultra Speech ERROR: Speech recognition not available');
       }
     }
   }
 
-  Future<void> startListening() async {
-    if (!_isInitialized) {
-      await initializeSpeech();
-    }
+  void startListening() async {
+    // speech = SpeechToText();
+    bool available = await speech.initialize(
+      onStatus: (status) async {
+        // print('Speech recognition status: $status AND is LISTENING STATUS ${isListening}');
+        if ((status == "done" || status == "notListening") && isListening) {
+          await speech.stop();
+          if (chunkResponse != '') {
+            entireResponse = '$entireResponse $chunkResponse';
+          }
+          chunkResponse = '';
+          liveResponse = '';
+          //MAIN CALLBACK HAPPENS
+          ultraCallback(liveResponse, entireResponse, isListening);
+          startListening();
+        }
+      },
+    );
 
-    if (_isInitialized) {
-      _isListening = true;
-      _liveResponse = '';
-      _chunkResponse = '';
-      ultraCallback(_liveResponse, _entireResponse, _isListening);
+    if (available) {
+      isListening = true;
+      liveResponse = '';
+      chunkResponse = '';
+      ultraCallback(liveResponse, entireResponse, isListening);
 
-      await _speech.listen(
+      await speech.listen(
         localeId: language,
         onResult: (result) {
           final state = result.recognizedWords;
-          _liveResponse = state;
+          liveResponse = state;
           if (result.finalResult) {
-            _chunkResponse = result.recognizedWords;
+            chunkResponse = result.recognizedWords;
           }
-          ultraCallback(_liveResponse, _entireResponse, _isListening);
+          ultraCallback(liveResponse, entireResponse, isListening);
         },
       );
+    } else {
+      debugPrint('Ultra Speech ERROR : Speech recognition not available');
     }
   }
 
-  Future<void> stopListening() async {
-    _speech.stop();
-    _isListening = false;
-    _entireResponse = '$_entireResponse $_chunkResponse';
-    ultraCallback(_liveResponse, _entireResponse, _isListening);
+  void stopListening() {
+    speech.stop();
+
+    isListening = false;
+    entireResponse = '$entireResponse $chunkResponse';
+    ultraCallback(liveResponse, entireResponse, isListening);
   }
 
   bool get isListening => _isListening;
