@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:speech_to_text_ultra_tg/speech_to_text_ultra.dart';
+import 'package:speech_to_text_ultra_tg/speech_to_text_ultra_tg.dart';
 
 void main() {
   runApp(MyApp());

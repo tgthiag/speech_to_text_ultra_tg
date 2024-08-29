@@ -166,7 +166,7 @@ class SpeechToTextUltra2 {
           chunkResponse = '';
           liveResponse = '';
           //MAIN CALLBACK HAPPENS
-          ultraCallback(liveResponse, entireResponse, isListening);
+          await ultraCallback(liveResponse, entireResponse, isListening);
           entireResponse = "";
           startListening();
         }
@@ -178,7 +178,7 @@ class SpeechToTextUltra2 {
       liveResponse = '';
       chunkResponse = '';
       if (entireResponse.isNotEmpty) {
-        ultraCallback(liveResponse, entireResponse, isListening);
+        await ultraCallback(liveResponse, entireResponse, isListening);
         entireResponse = "";
       }
       await speech.listen(
@@ -198,19 +198,18 @@ class SpeechToTextUltra2 {
     }
   }
 
-  void stopListening() {
+  Future<void> stopListening() async {
     speech.stop();
 
     isListening = false;
     entireResponse = chunkResponse;
-    ultraCallback(liveResponse, entireResponse, isListening);
+    await ultraCallback(liveResponse, entireResponse, isListening);
     entireResponse = "";
   }
 
   void dispose() {
-    if (isListening) {
-      stopListening();
-    }
+    stopListening();
+
     speech.cancel(); // Cancel any ongoing speech recognition
     // Optionally, set speech to null if you want to fully clean up:
     // speech = null;
