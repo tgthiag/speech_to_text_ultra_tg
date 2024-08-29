@@ -161,7 +161,7 @@ class SpeechToTextUltra2 {
         if ((status == "done" || status == "notListening") && isListening) {
           await speech.stop();
           if (chunkResponse != '') {
-            entireResponse = '$entireResponse $chunkResponse';
+            entireResponse = chunkResponse;
           }
           chunkResponse = '';
           liveResponse = '';
