@@ -1,5 +1,5 @@
-name: speech_to_text_ultra
-description: "Introducing a Flutter package solving sudden pauses during speech recognition. Manual pause/play allows uninterrupted dictation, enhancing user experience for seamless interaction."
+name: speech_to_text_ultra_tg
+description: "A modified version of the speech_to_text_ultra package to include language onlisten and update speech_to_text_package."
 version: 0.0.2
 homepage: https://github.com/souvik2710/speech_to_text_ultra
 
