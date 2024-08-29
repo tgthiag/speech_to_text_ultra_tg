@@ -201,4 +201,13 @@ class SpeechToTextUltra2 {
     entireResponse = chunkResponse;
     ultraCallback(liveResponse, entireResponse, isListening);
   }
+
+  void dispose() {
+    if (isListening) {
+      stopListening();
+    }
+    speech.cancel(); // Cancel any ongoing speech recognition
+    // Optionally, set speech to null if you want to fully clean up:
+    // speech = null;
+  }
 }
