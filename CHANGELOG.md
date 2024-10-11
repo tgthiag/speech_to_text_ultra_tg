@@ -16,3 +16,6 @@
 
 ## 0.0.6
 - Added param to pass SpeechListen Options
+- 
+## 0.0.7
+- SpeechListen Options now fixed

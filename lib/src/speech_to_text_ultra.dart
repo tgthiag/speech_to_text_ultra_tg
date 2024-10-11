@@ -128,7 +128,7 @@ class SpeechToTextUltra2 {
   String liveResponse = '';
   String entireResponse = '';
   String chunkResponse = '';
-
+  SpeechListenOptions options = SpeechListenOptions(cancelOnError: true,partialResults: false,onDevice: false, listenMode: ListenMode.dictation, autoPunctuation: true);
   final String? language;
   final Function(String liveText, String finalText, bool isListening)
       ultraCallback;
@@ -153,7 +153,8 @@ class SpeechToTextUltra2 {
   //   }
   // }
 
-  void startListening(SpeechListenOptions options) async {
+  void startListening() async {
+
     // speech = SpeechToText();
     bool available = await speech.initialize(
       onStatus: (status) async {
@@ -168,7 +169,7 @@ class SpeechToTextUltra2 {
           //MAIN CALLBACK HAPPENS
           await ultraCallback(liveResponse, entireResponse, isListening);
           entireResponse = "";
-          startListening(options);
+          startListening();
         }
       },
     );
@@ -183,6 +184,8 @@ class SpeechToTextUltra2 {
       }
       await speech.listen(
         listenOptions: options,
+        listenFor: Duration(seconds: 30),
+        pauseFor: Duration(seconds: 30),
         localeId: language,
         onResult: (result) async {
           final state = result.recognizedWords;
