@@ -1,7 +1,7 @@
 name: speech_to_text_ultra_tg
 description: "A modified version of the speech_to_text_ultra package to include language onlisten and update speech_to_text_package."
-version: 0.0.4
-homepage: https://github.com/souvik2710/speech_to_text_ultra
+version: 0.0.6
+homepage: https://github.com/tgthiag/speech_to_text_ultra_tg
 
 environment:
   sdk: '>=3.2.5 <4.0.0'

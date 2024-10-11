@@ -153,7 +153,7 @@ class SpeechToTextUltra2 {
   //   }
   // }
 
-  void startListening() async {
+  void startListening(SpeechListenOptions options) async {
     // speech = SpeechToText();
     bool available = await speech.initialize(
       onStatus: (status) async {
@@ -168,7 +168,7 @@ class SpeechToTextUltra2 {
           //MAIN CALLBACK HAPPENS
           await ultraCallback(liveResponse, entireResponse, isListening);
           entireResponse = "";
-          startListening();
+          startListening(options);
         }
       },
     );
@@ -182,6 +182,7 @@ class SpeechToTextUltra2 {
         entireResponse = "";
       }
       await speech.listen(
+        listenOptions: options,
         localeId: language,
         onResult: (result) async {
           final state = result.recognizedWords;

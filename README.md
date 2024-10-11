@@ -3,6 +3,10 @@
 Souvik Das
 [Link to Profile](https://www.linkedin.com/in/souvik2710/)
 
+## Edited by
+
+Thiago Carvalho
+[Link to Profile](https://www.linkedin.com/in/tgthiag/)
 ## Speech To Text Ultra
 
 This Flutter package designed to address the inconvenience of sudden pauses during speech recognition.
@@ -15,11 +19,11 @@ empowering users to communicate effortlessly and effectively.
 1. Add the latest version of package to your pubspec.yaml (and run`dart pub get`):
 ```yaml
 dependencies:
-  speech_to_text_ultra: ^0.0.1
+  speech_to_text_ultra_tg: ^0.0.6
 ```
 2. Import the package and use it in your Flutter App.
 ```dart
-import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text_ultra_tg/speech_to_text_ultra_tg.dart';
 ```
 
 
