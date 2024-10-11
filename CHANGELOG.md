@@ -8,3 +8,11 @@
 - Normal documentation update
 - Example added
 - Description made shorter
+
+## 0.0.5
+- added the functions to call start listening and stop listening
+- param to pass locale (language)
+- libs update
+
+## 0.0.6
+- Added param to pass SpeechListen Options
